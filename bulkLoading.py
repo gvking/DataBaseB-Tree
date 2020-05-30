@@ -7,21 +7,32 @@ import threading
 import generateRandomSequence as g
 import threading
 
-holder = []
-def bulkLoading(sequence):
-    holder = mymergesort(sequence)
-    return holder
-def mymergesort(sequence):
-    mid = len(sequence)/2
-    flushholder(holder)
-    return np.sort(sequence)
+
 def flushholder(holder):
     pd.DataFrame(holder).to_csv("backup.csv")
-flushholder
+print("What fill factor")
+fillFactor = float(input())/100
+print("what is fanout factor")
+fanFactor = input()
 holder = g.generateRandomSequence()
-holder = bulkLoading(holder)
+holder = np.sort(holder)
+flushholder(holder)
+
+number = float(fanFactor) * float(fillFactor)
+mainarray = []
+smallarray = []
+count = 0
 for i in holder:
-    print(i)
+    if(count == number):
+        mainarray.append(smallarray)
+        print(smallarray)
+        smallarray = []
+        count = 0
+    smallarray.append(i)
+    count+=1
+flushholder(mainarray)
+
+
 
 
 
