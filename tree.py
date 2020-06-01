@@ -34,11 +34,19 @@ with open('backup.csv') as csvfile:
                 leafnode.left = holder[count-2]
                 holder.append(leafnode)
                 print(leafnode.left.values)
-                count+=1
-
-            
+                count+=1 
         else:
             count+=1
+
+
+
+
+
+
+
+
+
+
 
 # root = None
 # while(len(holder) > 0):
