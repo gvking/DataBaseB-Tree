@@ -17,8 +17,9 @@ fanFactor = input()
 holder = g.generateRandomSequence()
 holder = np.sort(holder)
 flushholder(holder)
-
 number = float(fanFactor) * float(fillFactor)
+number = int(number)
+print(number)
 mainarray = []
 smallarray = []
 count = 0
