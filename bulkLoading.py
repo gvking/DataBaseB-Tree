@@ -6,6 +6,7 @@ import pandas as pd
 import threading
 import generateRandomSequence as g
 import threading
+import math
 
 
 def flushholder(holder):
@@ -18,7 +19,7 @@ holder = g.generateRandomSequence()
 holder = np.sort(holder)
 flushholder(holder)
 number = float(fanFactor) * float(fillFactor)
-number = int(number)
+number = math.ceil(number)
 print(number)
 mainarray = []
 smallarray = []
@@ -31,6 +32,8 @@ for i in holder:
         count = 0
     smallarray.append(i)
     count+=1
+if(len(smallarray)>0):
+    mainarray.append(smallarray)
 flushholder(mainarray)
 
 
