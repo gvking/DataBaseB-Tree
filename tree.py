@@ -14,7 +14,6 @@ class LeafNodePages():
     right = None 
 
 def searchforval(root, val):
-    print(val)
     if hasattr(root, 'children'):
         while root.children:
             if( val < float(root.children[0].value)):
