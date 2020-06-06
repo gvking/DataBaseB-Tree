@@ -1,7 +1,10 @@
 import csv
 import math
 import numpy as np
-import statistics
+import bulkLoading as bl
+
+
+
 class InternalNode():
     value = -1
     children = []
@@ -25,6 +28,7 @@ def searchforval(root, val):
                     return searchforval(root.children[i], val)   
     if hasattr(root, 'actvalues'):
         for i in root.actvalues:
+            print(i)
             if (float(i) == float(val)):
                 return True
 
@@ -87,10 +91,58 @@ def createtree():
 
         holder = newholder
     return holder[0]
-root = createtree()
-print(root.value)
-boolean = searchforval(root, 2148724404.0)
-print(boolean)
+
+print("Welcome! Insert N for new tree, R for restore, I for insert, F for find, B to force-backup, or E to exit")
+inp = input()
+root = None
+fillFactor = 0
+fanFactor  = 0
+number = 0
+while(inp != "E"):
+    if(inp == "N"):
+        print("You have chosen to create a new tree! We will generate and bulkload the tree.")
+        print("What fill factor")
+        fillFactor = float(input())/100
+        print("what is fanout factor")
+        fanFactor = input()
+        number = float(fanFactor) * float(fillFactor)
+        number = math.ceil(number)
+        bl.bulkLoad(number)
+        root = createtree()
+        print("Insert N for new tree, R for restore, I for insert, F for find, B to force-backup, or E to exit")
+        inp = input()
+    if(inp == "R"):
+        root = createtree()
+        print("Insert N for new tree, R for restore, I for insert, F for find, B to force-backup, or E to exit")
+        inp = input()
+    if(inp == "I"):
+        print("What value do you want to insert?")
+        value = float(input())
+        #Insert function over here
+
+        print("Insert N for new tree, R for restore, I for insert, F for find, B to force-backup, or E to exit")
+        inp = input()
+    if(inp == "F"):
+        print("What value do you want to search for?")
+        value = input()
+        boolean = searchforval(root, float(value))
+        if(boolean == True):
+            print("The value was found!")
+        else:
+            print("Sorry, we couldn't find that value")
+        print("Insert N for new tree, R for restore, I for insert, F for find, B to force-backup, or E to exit")
+        inp = input()
+    if(inp == "B"):
+        print("Backing up right now!")
+        #backup()
+        print("Insert N for new tree, R for restore, I for insert, F for find, B to force-backup, or E to exit")
+        inp = input()
+
+
+# root = createtree()
+# print(root.value)
+# boolean = searchforval(root, 2148724404.0)
+# print(boolean)
 
 
         
