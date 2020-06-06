@@ -15,7 +15,7 @@ def flushholder(holder):
 
 def bulkLoad(number):
     holder = g.generateRandomSequence()
-    holder = np.sort(holder)
+    holder = mergersort(holder)
     flushholder(holder)
     mainarray = []
     smallarray = []
@@ -31,6 +31,10 @@ def bulkLoad(number):
         mainarray.append(smallarray)
     flushholder(mainarray)
 
+def mergesort(array):
+
+    ### Fill out MergeSort here
+    return np.sort(array)
 
 array = []
 def backup(root, number):
