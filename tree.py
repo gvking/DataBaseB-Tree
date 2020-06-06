@@ -90,7 +90,7 @@ def createtree():
             newholder.append(newinternal)
 
         holder = newholder
-    return holder[0]
+    return holder[0], number
 
 print("Welcome! Insert N for new tree, R for restore, I for insert, F for find, B to force-backup, or E to exit")
 inp = input()
@@ -108,11 +108,11 @@ while(inp != "E"):
         number = float(fanFactor) * float(fillFactor)
         number = math.ceil(number)
         bl.bulkLoad(number)
-        root = createtree()
+        root, number = createtree()
         print("Insert N for new tree, R for restore, I for insert, F for find, B to force-backup, or E to exit")
         inp = input()
     if(inp == "R"):
-        root = createtree()
+        root, number = createtree()
         print("Insert N for new tree, R for restore, I for insert, F for find, B to force-backup, or E to exit")
         inp = input()
     if(inp == "I"):
@@ -134,7 +134,7 @@ while(inp != "E"):
         inp = input()
     if(inp == "B"):
         print("Backing up right now!")
-        #backup()
+        bl.backup(root, number)
         print("Insert N for new tree, R for restore, I for insert, F for find, B to force-backup, or E to exit")
         inp = input()
 

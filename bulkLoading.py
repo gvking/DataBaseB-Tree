@@ -32,8 +32,36 @@ def bulkLoad(number):
     flushholder(mainarray)
 
 
+array = []
+def backup(root, number):
+    if hasattr(root, 'children'):
+        for i in root.children:
+            backup(i, number)
+    else:
+        backuphelper(root, number)
+    return 
+           
+def backuphelper(root, number):
+    if hasattr(root, 'actvalues'):
+        for i in root.actvalues:
+            global array
+            array.append(i)
+        if(root.right == None):
+            mainarray = []
+            smallarray = []
+            count = 0
+            for i in array:
+                if(count == number):
+                    mainarray.append(smallarray)
+                    smallarray = []
+                    count = 0
+                smallarray.append(i)
+                count+=1
+            if(len(smallarray)>0):
+                mainarray.append(smallarray)
+            flushholder(mainarray)
 
-
+    
 
 
 
