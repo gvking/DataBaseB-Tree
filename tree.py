@@ -8,24 +8,28 @@ import bulkLoading as bl
 class InternalNode():
     value = -1
     children = []
+    parent = None
     
     
 class LeafNodePages():
     value = -1
     actvalues = []
     left = None
-    right = None 
+    right = None
+    parent = None
 
 def searchforval(root, val):
-    if hasattr(root, 'children'):
-        while root.children:
-            if( val < float(root.children[0].value)):
-                return searchforval(root.children[0], val)
-                break          
-            for i in range(1, len(root.children)):
-                if(val >= float(root.children[i-1].value) and val < float(root.children[i].value)):
-                    return searchforval(root.children[i-1], val)
-                    return searchforval(root.children[i], val)   
+    if hasattr(root, 'children'): 
+        if(val < float(root.children[0].value)):
+            return searchforval(root.children[0], val)
+        for i in range(1, len(root.children)):
+            if(val >= float(root.children[i-1].value) and val < float(root.children[i].value)):
+                return searchforval(root.children[i-1], val)
+                return searchforval(root.children[i], val)
+        if(val >= float(root.children[-1].value)):
+            return searchforval(root.children[-1], val)
+
+                
     if hasattr(root, 'actvalues'):
         for i in root.actvalues:
             print(i)
@@ -55,11 +59,15 @@ def createtree():
                 else:
                     leafnode = LeafNodePages()
                     leafnode.actvalues = row[1:]
-                    for i in leafnode.actvalues:
-                        if(i != ''):
-                            float(i)
-                        else:
-                            del i
+                    holderarray = []
+                    for i in range(len(leafnode.actvalues)):
+                        if(leafnode.actvalues[i] == ''):
+                            holderarray.append(i)
+                    randcount = 0
+                    for i in holderarray:
+                        del leafnode.actvalues[i-randcount]
+                        randcount +=1
+                    index = int(len(leafnode.actvalues)/2)
                     leafnode.value = leafnode.actvalues[int(len(leafnode.actvalues)/2)]
                     holder[count-2].right = leafnode
                     leafnode.left = holder[count-2]
@@ -72,23 +80,26 @@ def createtree():
 
     count = 0
     num = len(holder)
-
+    print(num)
     while(num > 1):
+        count = 0
         num = num/number
         num = math.ceil(num)
         newholder = []
         print(num)
         for i in range(num):
             newinternal = InternalNode()
-            for k in range(count, count+num):
+            newinternal.children = []
+            newinternal.value = -1
+            for k in range(count, count+number):
                 if(k >= len(holder)):
                     break
                 else:
                     newinternal.children.append(holder[k])
-            count = count+num
+            count = count+number
             newinternal.value = newinternal.children[int(len(newinternal.children)/2)].value
+            print(newinternal.value)
             newholder.append(newinternal)
-
         holder = newholder
     return holder[0], number
 

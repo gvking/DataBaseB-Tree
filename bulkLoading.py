@@ -15,7 +15,7 @@ def flushholder(holder):
 
 def bulkLoad(number):
     holder = g.generateRandomSequence()
-    holder = mergersort(holder)
+    holder = mergesort(holder)
     flushholder(holder)
     mainarray = []
     smallarray = []
