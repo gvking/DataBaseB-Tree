@@ -96,10 +96,15 @@ def createtree():
                     break
                 else:
                     newinternal.children.append(holder[k])
-            count = count+number
+            
             newinternal.value = newinternal.children[int(len(newinternal.children)/2)].value
-            print(newinternal.value)
+            for k in range(count, count+number):
+                if(k >= len(holder)):
+                    break
+                else:
+                    holder[k].parent = newinternal
             newholder.append(newinternal)
+            count = count+number
         holder = newholder
     return holder[0], number
 
@@ -154,6 +159,12 @@ while(inp != "E"):
     if(inp == "B"):
         print("Backing up right now!")
         bl.backup(root, number)
+        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, or E to exit")
+        inp = input()
+    if( inp == "Test"):
+        print("You've entered the hidden function!")
+        print(root.children[0].children[0].parent.value)
+        print(root.children[0].value)
         print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, or E to exit")
         inp = input()
 
