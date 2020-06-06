@@ -102,6 +102,8 @@ number = 0
 while(inp != "E"):
     if(count == 5):
         inp = "B"
+        print("Interrupting your action")
+        print("Force back up ")
         count = 0
     if(inp == "N"):
         print("You have chosen to create a new tree! We will generate and bulkload the tree.")
