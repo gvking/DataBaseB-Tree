@@ -92,13 +92,17 @@ def createtree():
         holder = newholder
     return holder[0], number
 
-print("Welcome! Insert N for new tree, R for restore, I for insert, F for find, B to force-backup, or E to exit")
+print("Welcome! Insert N for new tree, R for restore, I for insert, F for find, B to backup, or E to exit")
 inp = input()
 root = None
+count = 0
 fillFactor = 0
 fanFactor  = 0
 number = 0
 while(inp != "E"):
+    if(count == 5):
+        inp = "B"
+        count = 0
     if(inp == "N"):
         print("You have chosen to create a new tree! We will generate and bulkload the tree.")
         print("What fill factor")
@@ -109,19 +113,21 @@ while(inp != "E"):
         number = math.ceil(number)
         bl.bulkLoad(number)
         root, number = createtree()
-        print("Insert N for new tree, R for restore, I for insert, F for find, B to force-backup, or E to exit")
+        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, or E to exit")
         inp = input()
+        count+=1
     if(inp == "R"):
         root, number = createtree()
-        print("Insert N for new tree, R for restore, I for insert, F for find, B to force-backup, or E to exit")
+        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, or E to exit")
         inp = input()
     if(inp == "I"):
         print("What value do you want to insert?")
         value = float(input())
         #Insert function over here
 
-        print("Insert N for new tree, R for restore, I for insert, F for find, B to force-backup, or E to exit")
+        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, or E to exit")
         inp = input()
+        count+=1
     if(inp == "F"):
         print("What value do you want to search for?")
         value = input()
@@ -130,12 +136,12 @@ while(inp != "E"):
             print("The value was found!")
         else:
             print("Sorry, we couldn't find that value")
-        print("Insert N for new tree, R for restore, I for insert, F for find, B to force-backup, or E to exit")
+        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, or E to exit")
         inp = input()
     if(inp == "B"):
         print("Backing up right now!")
         bl.backup(root, number)
-        print("Insert N for new tree, R for restore, I for insert, F for find, B to force-backup, or E to exit")
+        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, or E to exit")
         inp = input()
 
 
