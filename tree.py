@@ -3,6 +3,7 @@ import math
 import numpy as np
 import bulkLoading as bl
 import time
+import pandas as pd
 
 
 
@@ -122,6 +123,7 @@ count = 0
 fillFactor = 0
 fanFactor  = 0
 number = 0
+logofuncommittedActs = []
 while(inp != "E"):
     if(count == 5):
         inp = "B"
@@ -142,6 +144,11 @@ while(inp != "E"):
         end = time.time()
         timediff = end - beginning
         print("time took (in seconds):", timediff)
+        logentry = []
+        logentry.append("N")
+        logentry.append(-1)
+        logentry.append(count)
+        logofuncommittedActs.append(logentry)
         print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
         inp = input()
         count+=1
@@ -151,13 +158,23 @@ while(inp != "E"):
         end = time.time()
         timediff = end - beginning
         print("time took (in seconds):", timediff)
+        logentry = []
+        logentry.append("R")
+        logentry.append(-1)
+        logentry.append(count)
+        logofuncommittedActs.append(logentry)
         print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
         inp = input()
+        count +=1
     if(inp == "I"):
         print("What value do you want to insert?")
         value = float(input())
         #Insert function over here
-
+        logentry = []
+        logentry.append("I")
+        logentry.append(value)
+        logentry.append(count)
+        logofuncommittedActs.append(logentry)
         print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
         inp = input()
         count+=1
@@ -173,6 +190,12 @@ while(inp != "E"):
             print("The value was found!")
         else:
             print("Sorry, we couldn't find that value")
+        logentry = []
+        logentry.append("F")
+        logentry.append(value)
+        logentry.append(count)
+        logofuncommittedActs.append(logentry)
+        count +=1
         print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
         inp = input()
     if(inp == "B"):
@@ -182,19 +205,22 @@ while(inp != "E"):
         end = time.time()
         timediff = end - beginning
         print("time took (in seconds):", timediff)
+        logofuncommittedActs = []
         print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
+        count = 0
         inp = input()
     if(inp == "H"):
         print(height(root, 1))
         print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
         inp = input()
+        count +=1
     if( inp == "Test"):
         print("You've entered the hidden function!")
         print(root.children[0].children[0].parent.value)
         print(root.children[0].value)
         print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
         inp = input()
-
+    pd.DataFrame(logofuncommittedActs).to_csv("log.csv")
 
 # root = createtree()
 # print(root.value)
