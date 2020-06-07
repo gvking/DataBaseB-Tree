@@ -153,6 +153,15 @@ while(inp != "E"):
         inp = input()
         count+=1
     if(inp == "R"):
+        with open('log.csv') as csvfile:
+            spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+            for row in spamreader:
+                print(row[1])
+                if(row[1] == "I"):
+                    print("An insert wasn't comitted into storage.")
+                    print("Inserting " + str(row[2]))
+                        
+ 
         beginning = time.time()
         root, number = createtree()
         end = time.time()
