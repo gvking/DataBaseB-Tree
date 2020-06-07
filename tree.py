@@ -2,6 +2,7 @@ import csv
 import math
 import numpy as np
 import bulkLoading as bl
+import time
 
 
 
@@ -88,13 +89,11 @@ def createtree():
 
     count = 0
     num = len(holder)
-    print(num)
     while(num > 1):
         count = 0
         num = num/number
         num = math.ceil(num)
         newholder = []
-        print(num)
         for i in range(num):
             newinternal = InternalNode()
             newinternal.children = []
@@ -106,7 +105,6 @@ def createtree():
                     newinternal.children.append(holder[k])
             
             newinternal.value = newinternal.children[int(len(newinternal.children)/2)].value
-            print(newinternal.value)
             for k in range(count, count+number):
                 if(k >= len(holder)):
                     break
@@ -138,13 +136,21 @@ while(inp != "E"):
         fanFactor = input()
         number = float(fanFactor) * float(fillFactor)
         number = math.ceil(number)
+        beginning = time.time()
         bl.bulkLoad(number)
         root, number = createtree()
+        end = time.time()
+        timediff = end - beginning
+        print("time took (in seconds):", timediff)
         print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
         inp = input()
         count+=1
     if(inp == "R"):
+        beginning = time.time()
         root, number = createtree()
+        end = time.time()
+        timediff = end - beginning
+        print("time took (in seconds):", timediff)
         print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
         inp = input()
     if(inp == "I"):
@@ -158,7 +164,11 @@ while(inp != "E"):
     if(inp == "F"):
         print("What value do you want to search for?")
         value = input()
+        beginning = time.time()
         boolean = searchforval(root, float(value))
+        end = time.time()
+        timediff = end - beginning
+        print("time took (in seconds):", timediff)
         if(boolean == True):
             print("The value was found!")
         else:
@@ -167,7 +177,11 @@ while(inp != "E"):
         inp = input()
     if(inp == "B"):
         print("Backing up right now!")
+        beginning = time.time()
         bl.backup(root, number)
+        end = time.time()
+        timediff = end - beginning
+        print("time took (in seconds):", timediff)
         print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
         inp = input()
     if(inp == "H"):
