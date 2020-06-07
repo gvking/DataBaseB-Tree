@@ -116,8 +116,7 @@ def createtree():
         holder = newholder
     return holder[0], number
 
-print("Welcome! Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
-inp = input()
+inp = 0
 root = None
 count = 0
 fillFactor = 0
@@ -125,6 +124,8 @@ fanFactor  = 0
 number = 0
 logofuncommittedActs = []
 while(inp != "E"):
+    print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
+    inp = input()
     if(count == 5):
         inp = "B"
         print("Interrupting your action")
@@ -149,14 +150,11 @@ while(inp != "E"):
         logentry.append(-1)
         logentry.append(count)
         logofuncommittedActs.append(logentry)
-        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
-        inp = input()
         count+=1
     if(inp == "R"):
         with open('log.csv') as csvfile:
             spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
             for row in spamreader:
-                print(row[1])
                 if(row[1] == "I"):
                     print("An insert wasn't comitted into storage.")
                     print("Inserting " + str(row[2]))
@@ -172,8 +170,6 @@ while(inp != "E"):
         logentry.append(-1)
         logentry.append(count)
         logofuncommittedActs.append(logentry)
-        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
-        inp = input()
         count +=1
     if(inp == "I"):
         print("What value do you want to insert?")
@@ -184,8 +180,6 @@ while(inp != "E"):
         logentry.append(value)
         logentry.append(count)
         logofuncommittedActs.append(logentry)
-        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
-        inp = input()
         count+=1
     if(inp == "F"):
         print("What value do you want to search for?")
@@ -205,8 +199,6 @@ while(inp != "E"):
         logentry.append(count)
         logofuncommittedActs.append(logentry)
         count +=1
-        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
-        inp = input()
     if(inp == "B"):
         print("Backing up right now!")
         beginning = time.time()
@@ -215,20 +207,14 @@ while(inp != "E"):
         timediff = end - beginning
         print("time took (in seconds):", timediff)
         logofuncommittedActs = []
-        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
         count = 0
-        inp = input()
     if(inp == "H"):
         print(height(root, 1))
-        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
-        inp = input()
         count +=1
     if( inp == "Test"):
         print("You've entered the hidden function!")
         print(root.children[0].children[0].parent.value)
         print(root.children[0].value)
-        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
-        inp = input()
     pd.DataFrame(logofuncommittedActs).to_csv("log.csv")
 
 # root = createtree()
