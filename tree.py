@@ -20,15 +20,18 @@ class LeafNodePages():
 
 def searchforval(root, val):
     if hasattr(root, 'children'): 
-        if(val < float(root.children[0].value)):
-            return searchforval(root.children[0], val)
-        for i in range(1, len(root.children)):
-            if(val >= float(root.children[i-1].value) and val < float(root.children[i].value)):
-                return searchforval(root.children[i-1], val)
-                return searchforval(root.children[i], val)
-        if(val >= float(root.children[-1].value)):
-            return searchforval(root.children[-1], val)
-
+            if( val < float(root.children[0].value)):
+                bool1 = searchforval(root.children[0], val) 
+                if( bool1 == True):
+                    return True      
+            for i in range(1, len(root.children)):
+                if(val >= float(root.children[i-1].value) and val <= float(root.children[i].value)):
+                    bool2 = searchforval(root.children[i], val) 
+                    bool3 = searchforval(root.children[i-1], val) 
+                    if(bool2 == True or bool3 == True):
+                        return True
+            if(val >= float(root.children[-1].value)):
+                return searchforval(root.children[-1], val)
                 
     if hasattr(root, 'actvalues'):
         for i in root.actvalues:
@@ -98,6 +101,7 @@ def createtree():
                     newinternal.children.append(holder[k])
             
             newinternal.value = newinternal.children[int(len(newinternal.children)/2)].value
+            print(newinternal.value)
             for k in range(count, count+number):
                 if(k >= len(holder)):
                     break
