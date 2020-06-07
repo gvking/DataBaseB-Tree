@@ -35,10 +35,15 @@ def searchforval(root, val):
                 
     if hasattr(root, 'actvalues'):
         for i in root.actvalues:
-            print(i)
             if (float(i) == float(val)):
                 return True
 
+
+def height(root, count):
+    if hasattr(root, 'children'):
+        return height(root.children[0], count+1)
+    else:
+        return count
 
 def createtree():
     holder = []
@@ -112,7 +117,7 @@ def createtree():
         holder = newholder
     return holder[0], number
 
-print("Welcome! Insert N for new tree, R for restore, I for insert, F for find, B to backup, or E to exit")
+print("Welcome! Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
 inp = input()
 root = None
 count = 0
@@ -135,19 +140,19 @@ while(inp != "E"):
         number = math.ceil(number)
         bl.bulkLoad(number)
         root, number = createtree()
-        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, or E to exit")
+        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
         inp = input()
         count+=1
     if(inp == "R"):
         root, number = createtree()
-        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, or E to exit")
+        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
         inp = input()
     if(inp == "I"):
         print("What value do you want to insert?")
         value = float(input())
         #Insert function over here
 
-        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, or E to exit")
+        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
         inp = input()
         count+=1
     if(inp == "F"):
@@ -158,18 +163,22 @@ while(inp != "E"):
             print("The value was found!")
         else:
             print("Sorry, we couldn't find that value")
-        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, or E to exit")
+        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
         inp = input()
     if(inp == "B"):
         print("Backing up right now!")
         bl.backup(root, number)
-        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, or E to exit")
+        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
+        inp = input()
+    if(inp == "H"):
+        print(height(root, 1))
+        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
         inp = input()
     if( inp == "Test"):
         print("You've entered the hidden function!")
         print(root.children[0].children[0].parent.value)
         print(root.children[0].value)
-        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, or E to exit")
+        print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
         inp = input()
 
 
