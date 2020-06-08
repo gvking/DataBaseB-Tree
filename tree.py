@@ -291,7 +291,7 @@ fanFactor  = 0
 number = 0
 logofuncommittedActs = []
 while(inp != "E"):
-    print("Insert N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
+    print("Input N for new tree, R for restore, I for insert, F for find, B to backup, H for height, or E to exit")
     inp = input()
     if(count == 5):
         inp = "B"
@@ -343,7 +343,12 @@ while(inp != "E"):
         print("What value do you want to insert?")
         value = float(input())
         #Insert function over here
+        beginning = time.time()
         root = insert(root, value, number)
+        end = time.time()
+        timediff = end - beginning
+        print("time took (in seconds):", timediff)
+        print("Inserted", value)
         logentry = []
         logentry.append("I")
         logentry.append(value)
