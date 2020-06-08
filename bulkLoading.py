@@ -43,6 +43,7 @@ def backup(root, number):
             backup(i, number)
     else:
         backuphelper(root, number)
+    array = []
     return 
            
 def backuphelper(root, number):
@@ -64,7 +65,7 @@ def backuphelper(root, number):
             if(len(smallarray)>0):
                 mainarray.append(smallarray)
             flushholder(mainarray)
-
+    
     
 
 
