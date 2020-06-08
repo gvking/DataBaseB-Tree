@@ -73,9 +73,6 @@ def insert(root, val, thresh):
                 break
             elif (i == len(current.actvalues)-1 and val >= float(current.actvalues[i]) and val >= float(current2.actvalues[0])):
                 current = current.right
-
-    print(current.actvalues)
-
     parentStuff = None
     tempHolder = []
     newinternalNode = None
@@ -86,100 +83,94 @@ def insert(root, val, thresh):
                 countStuff = 0
                 temp = []
                 for k in current.actvalues:
+                    temp.append(k)
+                    countStuff +=1
                     if(countStuff == thresh ):
                         tempHolder.append(temp)
                         temp = []
                         countStuff = 0
-                    temp.append(k)
-                    countStuff +=1
-                if(len(temp) > 0):
-                    tempHolder.append(temp)
-                newtemp = []
-                for i in tempHolder:
-                    newinternalNode = LeafNodePages()
-                    newinternalNode.value = i[int(len(i)/2)] 
-                    newinternalNode.actvalues = i
-                    newinternalNode.parent = current.parent
-                    newtemp.append(newinternalNode)
-                index = current.parent.children.index(current)
-                del current.parent.children[index]
-                for i in newtemp:
-                    current.parent.children.append(i)
-                    # current.parent.children.append
-                current = current.parent
-                print(current.children)
-                tempHolder = []
-            else:
-                countStuff = 0
-                temp = []
-                tempHolder = []
-                for k in current.children:
-                    if(countStuff == thresh):
-                        tempHolder.append(temp)
-                        temp = []
-                        countStuff = 0
-                    temp.append(k)
-                    countStuff +=1
                 if(len(temp) > 0):
                     tempHolder.append(temp)
                 newtemp = []
                 for i in tempHolder:
                     newinternalNode = None
-                    newinternalNode = InternalNode()
-                    newinternalNode.value = i[int(len(i)/2)].value
+                    newinternalNode = LeafNodePages()
+                    newinternalNode.value = i[int(len(i)/2)] 
                     newinternalNode.parent = current.parent
-                    for k in i:
-                        newinternalNode.children.append(k)
+                    newinternalNode.actvalues = i
                     newtemp.append(newinternalNode)
-                   
                 index = current.parent.children.index(current)
                 del current.parent.children[index]
                 for i in newtemp:
-                    current.parent.children.append(i)
-                    # current.parent.children.append
+                    current.parent.children.insert(index, i)
+                    index+=1
                 current = current.parent
+                return root
+
+            
+
+        #         print(current.value)
+        #         countStuff = 0
+        #         temp = []
+        #         tempHolder = []
+        #         for k in current.children:
+        #             if(countStuff == thresh):
+        #                 tempHolder.append(temp)
+        #                 temp = []
+        #                 countStuff = 0
+        #             temp.append(k)
+        #             countStuff +=1
+        #         if(len(temp) > 0):
+        #             tempHolder.append(temp)
+        #         newtemp = []
+        #         for i in tempHolder:
+        #             newinternalNode = None
+        #             newinternalNode = InternalNode()
+        #             newinternalNode.value = i[int(len(i)/2)].value
+        #             newinternalNode.parent = current.parent
+        #             newinternalNode.children = i  
+        #             for k in i:   
+                         
+        #                 k.parent = newinternalNode
+        #             newtemp.append(newinternalNode)
+                   
+        #         index = current.parent.children.index(current)
+        #         del current.parent.children[index]
+        #         for i in newtemp:
+        #             current.parent.children.append(i)
+        #             # current.parent.children.append
+        #         current = current.parent
                 
-        else:
-            print("reached root")
-            return root
-            print(len(current.children))
-            print(current.children)
-            countStuff = 0
-            temp = []
-            tempHolder = []
-            for k in current.children:
-                if(countStuff == thresh):
-                    tempHolder.append(temp)
-                    temp = []
-                countStuff = 0
-                temp.append(k)
-                print(k.parent)
-                countStuff +=1
-            if(len(temp) > 0):
-                tempHolder.append(temp)
-            print(len(tempHolder))
-            newtemp = []
-            for i in tempHolder:
-                newinternalNode = None
-                newinternalNode = InternalNode()
-                newinternalNode.value = i[int(len(i)/2)].value
-                newinternalNode.parent = current.parent
-                for k in i:
-                    newinternalNode.children.append(i)
-                    k.parent = newinternalNode
-                newtemp.append(newinternalNode)
-            if(len(newtemp) == 1):
-                root = newtemp[0]
-                current = newtemp[0]
+        # else:
+        #     print("reached root")
+        #     print(len(current.children))
+        #     if(len(current.children) == thresh):
+        #         return root
+        #     print(current.children)
+        #     countStuff = 0
+        #     temp = []
+        #     tempHolder = []
+        #     for k in current.children:
+        #         if(countStuff == thresh):
+        #             tempHolder.append(temp)
+        #             temp = []
+        #         countStuff = 0
+        #         temp.append(k)
+        #         print(k.parent.value)
+        #         countStuff +=1
+        #     if(len(temp) > 0):
+        #         tempHolder.append(temp)
+            
+            
                 
 
             
 
             
             
-            break
+            # break
           
-       
+    
         
     return root
 
@@ -197,7 +188,7 @@ class LeafNodePages():
     parent = None
 
 def searchforval(root, val):
-    if hasattr(root, 'children'): 
+    if hasattr(root, 'children'):
             if( val < float(root.children[0].value)):
                 bool1 = searchforval(root.children[0], val) 
                 if( bool1 == True):

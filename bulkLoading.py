@@ -37,37 +37,46 @@ def mergesort(array):
     return np.sort(array)
 
 array = []
-def backup(root, number):
-    if hasattr(root, 'children'):
-        for i in root.children:
-            backup(i, number)
-    else:
-        backuphelper(root, number)
-    return 
+# def backup(root, number):
+#     if hasattr(root, 'children'):
+#         for i in root.children:
+#             print(i.value)
+#             backup(i, number)
+#     else:
+#         backuphelper(root, number)
+#     return 
            
-def backuphelper(root, number):
-    if hasattr(root, 'actvalues'):
-        for i in root.actvalues:
-            global array
-            array.append(i)
-        if(root.right == None):
-            mainarray = []
-            smallarray = []
-            count = 0
-            for i in array:
-                if(count == number):
-                    mainarray.append(smallarray)
-                    smallarray = []
-                    count = 0
-                smallarray.append(i)
-                count+=1
-            if(len(smallarray)>0):
-                mainarray.append(smallarray)
-            array = []
-            flushholder(mainarray)
+# def backuphelper(root, number):
+#     if hasattr(root, 'actvalues'):
+#         for i in root.actvalues:
+#             global array
+#             array.append(i)
+#         if(root.right == None):
+#             mainarray = []
+#             smallarray = []
+#             count = 0
+#             for i in array:
+#                 if(count == number):
+#                     mainarray.append(smallarray)
+#                     smallarray = []
+#                     count = 0
+#                 smallarray.append(i)
+#                 count+=1
+#             if(len(smallarray)>0):
+#                 mainarray.append(smallarray)
+#             array = []
+#             flushholder(mainarray)
     
     
 
+def backup(root, number):
+    global array
+    if hasattr(root, 'children'):  
+            for i in range(0, len(root.children)):
+                backup(root.children[i], number) 
+            flushholder(array)            
+    if hasattr(root, 'actvalues'): 
+        array.append(root.actvalues)
 
 
     
