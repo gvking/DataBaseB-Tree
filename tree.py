@@ -373,7 +373,7 @@ while(inp != "E"):
         pd.DataFrame(nullval).to_csv("backup.csv")
         print("Backing up right now!")
         beginning = time.time()
-        bl.backup(root, number)
+        bl.backup(root, 0)
         end = time.time()
         timediff = end - beginning
         print("time took (in seconds):", timediff)

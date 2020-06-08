@@ -69,12 +69,13 @@ array = []
     
     
 
-def backup(root, number):
+def backup(root, count):
     global array
     if hasattr(root, 'children'):  
             for i in range(0, len(root.children)):
-                backup(root.children[i], number) 
-            flushholder(array)            
+                backup(root.children[i], count+1) 
+    if(count == 0):
+        flushholder(array)
     if hasattr(root, 'actvalues'): 
         array.append(root.actvalues)
 
