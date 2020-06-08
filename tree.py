@@ -46,135 +46,141 @@ def insert(root, val, thresh):
             if stopit==True:
                 break
             
-                
-
-    print(current.actvalues)
-    print('Hello')
     #next insert into correct leaf
     ct = 0
     while ct==0:
         current2 = current.right
         for i in range(len(current.actvalues)):
             if val < float(current.actvalues[i]):
-                current.actvalues.insert(0, val)
+                current.actvalues.insert(0, str(val))
                 ct+=1
                 break
             elif len(current.actvalues) == 1:
-                current.actvalues.append(val)
+                current.actvalues.append(str(val))
                 ct+=1
                 break
             elif i+1 <= len(current.actvalues)-1 and val >= float(current.actvalues[i]) and val < float(current.actvalues[i+1]):
-                current.actvalues.insert(i+1, val)
+                current.actvalues.insert(i+1, str(val))
                 ct+=1
                 break
-            elif i == len(current.actvalues)-1 and val >= float(current.actvalues[i]) and val < float(current2.actvalues[0]):
-                current.actvalues.append(val)
+            elif (i == len(current.actvalues)-1 and val >= float(current.actvalues[i]) and current.right == None):
+                current.actvalues.append(str(val))
                 ct+=1
                 break
-            else:
+            elif (i == len(current.actvalues)-1 and val >= float(current.actvalues[i]) and val < float(current2.actvalues[0])):
+                current.actvalues.append(str(val))
+                ct+=1
+                break
+            elif (i == len(current.actvalues)-1 and val >= float(current.actvalues[i]) and val >= float(current2.actvalues[0])):
                 current = current.right
 
+    print(current.actvalues)
 
-    #next, if the leaf is full, propogate up
-    
-    if len(current.actvalues) >= thresh:
-        while True:
-            if current.parent == root:
-                splitter = math.floor(len(current.parent.children)/2)
-                firstHalf = [current.parent.children[i] for i in range(0, splitter)]
-                secondHalf = [current.parent.children[i] for i in range(splitter, len(current.parent.children))]
-                new1 = InternalNode()
-                new1.children = firstHalf
-                new1.parent=root
-                new1.value = firstHalf[-1].value
-                for i in range(len(firstHalf)):
-                    firstHalf[i].parent = new1
-                new2 = InternalNode()
-                new2.children = secondHalf
-                new2.parent=root
-                new2.value = secondHalf[0].value
-                for i in range(len(secondHalf)):
-                    secondHalf[i].parent = new2
-                root.children = [new1, new2]
-                current = new1.children[0]
-            elif hasattr(current, 'actvalues'): #if current is at a leaf node, do the following: split leaf node, propogate median up
-                splitter = math.floor(len(current.actvalues)/2)
-                firstHalf = [current.actvalues[i] for i in range(0, splitter)]
-                secondHalf = [current.actvalues[i] for i in range(splitter, len(current.actvalues))]
-                if float(secondHalf[0]) < float(current.parent.value): #left node side
-                    current.actvalues = secondHalf
-                    newOne = LeafNodePages()
-                    newOne.actvalues = firstHalf
-                    current.left = newOne
-                    newOne.right = current
-                    newOne.left = current.left.left
-                    if current.left.left != None:
-                        current.left.left.right = newOne
-                    #add newOne to the array of leaf nodes at the parent
-                    current.parent.children.insert(current.parent.children.index(current)-1, newOne)
-                    newOne.parent = current.parent
-                    #push median up
-                    newOne2 = InternalNode()
-                    newOne2.value = secondHalf[0]
-                    current.parent.parent.children.insert(current.parent.parent.children.index(current.parent)-1, newOne2)
-                    newOne2.children = [current.parent.children[i] for i in range(0, current.parent.children.index(current))]
-                    for i in range(len(newOne2.children)):
-                        newOne2.children[i].parent = newOne2
-                    del current.parent.children[0:current.parent.children.index(current)]
-                else:
-                    current.actvalues = firstHalf
-                    newOne = LeafNodePages()
-                    newOne.actvalues = secondHalf
-                    current.right = newOne
-                    newOne.left = current
-                    newOne.right = current.right.right
-                    if current.right.right != None:
-                        current.right.right.left = newOne
-                    #everything is connected, append the values
-                    current.parent.children.insert(current.parent.children.index(current)+1, newOne)
-                    newOne.parent = current.parent
-                    #push median up
-                    newOne2 = InternalNode()
-                    newOne2.value = secondHalf[0]
-                    current.parent.parent.children.insert(current.parent.parent.children.index(current.parent)+1, newOne2)
-                    newOne2.children = [current.parent.children[i] for i in range(current.parent.children.index(current)+1, len(current.parent.children))]
-                    for i in range(len(newOne2.children)):
-                        newOne2.children[i].parent = newOne2
-                    del current.parent.children[current.parent.children.index(current)+1:]
-            else: #current is not a leaf node
-                splitter = math.floor(len(current.parent.children)/2)
-                firstHalf = [current.parent.children[i] for i in range(0, splitter)]
-                secondHalf = [current.parent.children[i] for i in range(splitter, len(current.parent.children))]
-                if float(secondHalf[0].value) < float(current.parent.value):
-                    current.parent.children = secondHalf
-                    for i in range(len(secondHalf)):
-                        secondHalf[i].parent = current.parent
-                    #push median up
-                    newOne2 = InternalNode()
-                    newOne2.value = secondHalf[0].value
-                    current.parent.parent.children.insert(current.parent.parent.children.index(current.parent)-1, newOne2)
-                    newOne2.parent = current.parent.parent
-                    newOne2.children = firstHalf
-                    for i in range(len(firstHalf)):
-                        firstHalf[i].parent = newOne2
-                else:
-                    current.parent.children = firstHalf
-                    for i in range(len(firstHalf)):
-                       firstHalf[i].parent = current.parent
-                    newOne2 = InternalNode()
-                    newOne2.value = secondHalf[0].value
-                    current.parent.parent.children.insert(current.parent.parent.children.index(current.parent)+1, newOne2)
-                    newOne2.parent = current.parent.parent
-                    newOne2.children = secondHalf
-                    for i in range(len(secondHalf)):
-                        secondHalf[i].parent = newOne2
-            
-            if len(current.parent.parent.children) < thresh:
-                break
-            else:
+    parentStuff = None
+    tempHolder = []
+    newinternalNode = None
+    while( (hasattr(current, 'actvalues') and len(current.actvalues) >= thresh) or len(current.children) >= thresh):
+        if(current.parent!= None):
+            if(hasattr(current, 'actvalues')):
+                parentStuff = current.parent
+                countStuff = 0
+                temp = []
+                for k in current.actvalues:
+                    if(countStuff == thresh ):
+                        tempHolder.append(temp)
+                        temp = []
+                        countStuff = 0
+                    temp.append(k)
+                    countStuff +=1
+                if(len(temp) > 0):
+                    tempHolder.append(temp)
+                newtemp = []
+                for i in tempHolder:
+                    newinternalNode = LeafNodePages()
+                    newinternalNode.value = i[int(len(i)/2)] 
+                    newinternalNode.actvalues = i
+                    newinternalNode.parent = current.parent
+                    newtemp.append(newinternalNode)
+                index = current.parent.children.index(current)
+                del current.parent.children[index]
+                for i in newtemp:
+                    current.parent.children.append(i)
+                    # current.parent.children.append
                 current = current.parent
+                print(current.children)
+                tempHolder = []
+            else:
+                countStuff = 0
+                temp = []
+                tempHolder = []
+                for k in current.children:
+                    if(countStuff == thresh):
+                        tempHolder.append(temp)
+                        temp = []
+                        countStuff = 0
+                    temp.append(k)
+                    countStuff +=1
+                if(len(temp) > 0):
+                    tempHolder.append(temp)
+                newtemp = []
+                for i in tempHolder:
+                    newinternalNode = None
+                    newinternalNode = InternalNode()
+                    newinternalNode.value = i[int(len(i)/2)].value
+                    newinternalNode.parent = current.parent
+                    for k in i:
+                        newinternalNode.children.append(i)
+                    newtemp.append(newinternalNode)
+                   
+                index = current.parent.children.index(current)
+                del current.parent.children[index]
+                for i in newtemp:
+                    current.parent.children.append(i)
+                    # current.parent.children.append
+                current = current.parent
+                
+        else:
+            print("reached root")
+            return root
+            print(len(current.children))
+            print(current.children)
+            countStuff = 0
+            temp = []
+            tempHolder = []
+            for k in current.children:
+                if(countStuff == thresh):
+                    tempHolder.append(temp)
+                    temp = []
+                countStuff = 0
+                temp.append(k)
+                print(k.parent)
+                countStuff +=1
+            if(len(temp) > 0):
+                tempHolder.append(temp)
+            print(len(tempHolder))
+            newtemp = []
+            for i in tempHolder:
+                newinternalNode = None
+                newinternalNode = InternalNode()
+                newinternalNode.value = i[int(len(i)/2)].value
+                newinternalNode.parent = current.parent
+                for k in i:
+                    newinternalNode.children.append(i)
+                    k.parent = newinternalNode
+                newtemp.append(newinternalNode)
+            if(len(newtemp) == 1):
+                root = newtemp[0]
+                current = newtemp[0]
+                
+
             
 
+            
+            
+            break
+          
+       
+        
     return root
 
 class InternalNode():
@@ -330,6 +336,8 @@ while(inp != "E"):
         with open('log.csv') as csvfile:
             spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
             for row in spamreader:
+                if(len(row) < 2):
+                    break
                 if(row[1] == "I"):
                     print("An insert wasn't comitted into storage.")
                     print("Inserting " + str(row[2]))
@@ -393,45 +401,3 @@ while(inp != "E"):
 # print(root.value)
 # boolean = searchforval(root, 2148724404.0)
 # print(boolean)
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-# root = None
-# while(len(holder) > 0):
-#     length = len(holder)
-#     if(length == 1):
-#         root = holder[0]
-#     count = 0
-#     newholder = []
-#     for i in range(length):
-#         if(count == number):
-#             newholder.append(newholder)
-#             count == 0
-#         internal = InternalNode()
-#         internal.children.append(holder[i])
-#         count +=1
-#     holder = newholder
-
-
-
-
-
-
-        
-
-
-
-
-
