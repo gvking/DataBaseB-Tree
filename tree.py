@@ -333,6 +333,7 @@ while(inp != "E"):
                 if(row[1] == "I"):
                     print("An insert wasn't comitted into storage.")
                     print("Inserting " + str(row[2]))
+                    root = insert(root, float(row[2]), number)
         logentry = []
         logentry.append("R")
         logentry.append(-1)
@@ -343,6 +344,7 @@ while(inp != "E"):
         print("What value do you want to insert?")
         value = float(input())
         #Insert function over here
+        root = insert(root, value, number)
         insert()
         logentry = []
         logentry.append("I")
