@@ -5,7 +5,7 @@ import numpy as np
 
 
 def generateRandomSequence():
-    return np.random.randint(2**32 , size = 1000000)
+    return np.random.randint(2**32 , size =10000)
 
 holder = generateRandomSequence()
 

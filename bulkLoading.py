@@ -37,47 +37,39 @@ def mergesort(array):
     return np.sort(array)
 
 array = []
-# def backup(root, number):
-#     if hasattr(root, 'children'):
-#         for i in root.children:
-#             print(i.value)
-#             backup(i, number)
-#     else:
-#         backuphelper(root, number)
-#     return 
-           
-# def backuphelper(root, number):
-#     if hasattr(root, 'actvalues'):
-#         for i in root.actvalues:
-#             global array
-#             array.append(i)
-#         if(root.right == None):
-#             mainarray = []
-#             smallarray = []
-#             count = 0
-#             for i in array:
-#                 if(count == number):
-#                     mainarray.append(smallarray)
-#                     smallarray = []
-#                     count = 0
-#                 smallarray.append(i)
-#                 count+=1
-#             if(len(smallarray)>0):
-#                 mainarray.append(smallarray)
-#             array = []
-#             flushholder(mainarray)
     
     
 
-def backup(root, count):
+def backup(root, count, number):
     global array
     if hasattr(root, 'children'):  
             for i in range(0, len(root.children)):
-                backup(root.children[i], count+1) 
+                backup(root.children[i], count+1, number) 
     if(count == 0):
-        flushholder(array)
+        array = np.sort(array)
+        mainarray = []
+        smallarray = []
+        countn = 0
+        for i in array:
+            if(countn == number):
+                mainarray.append(smallarray)
+                smallarray = []
+                countn = 0
+            smallarray.append(i)
+            countn+=1
+        if(len(smallarray)>0):
+            mainarray.append(smallarray)
+        flushholder(mainarray)
+        array = []
     if hasattr(root, 'actvalues'): 
-        array.append(root.actvalues)
+        if(root.actvalues == []):
+            hi = "ji"
+        else:
+            temp = []
+            for i in root.actvalues:
+                temp.append(i)
+            for i in temp:
+                array.append(float(i))
 
 
     

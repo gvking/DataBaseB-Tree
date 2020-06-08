@@ -237,6 +237,15 @@ class LeafNodePages():
     def __lt__(self, other):
         return self.value < other.value
 
+
+def removeallblanks(csv):
+    holder = []
+    ifile = open("backup.csv")
+    for line in csv.reader(ifile):
+        print(line)
+        if not line:
+            print("hello")
+    pd.DataFrame(holder).to_csv("backup.csv")
 def searchforval(root, val):
     if hasattr(root, 'children'):
             if( val < float(root.children[0].value)):
@@ -403,6 +412,9 @@ while(inp != "E"):
         #Insert function over here
         beginning = time.time()
         root = insert(root, value, number)
+        bl.backup(root, 0, number)
+        #removeallblanks("backup.csv")
+        root, number = createtree()
         end = time.time()
         timediff = end - beginning
         print("time took (in seconds):", timediff)
@@ -432,7 +444,7 @@ while(inp != "E"):
         pd.DataFrame(nullval).to_csv("backup.csv")
         print("Backing up right now!")
         beginning = time.time()
-        bl.backup(root, 0)
+        bl.backup(root, 0, number)
         end = time.time()
         timediff = end - beginning
         print("time took (in seconds):", timediff)
