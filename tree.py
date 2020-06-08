@@ -129,7 +129,7 @@ def insert(root, val, thresh):
                     newinternalNode.value = i[int(len(i)/2)].value
                     newinternalNode.parent = current.parent
                     for k in i:
-                        newinternalNode.children.append(i)
+                        newinternalNode.children.append(k)
                     newtemp.append(newinternalNode)
                    
                 index = current.parent.children.index(current)
