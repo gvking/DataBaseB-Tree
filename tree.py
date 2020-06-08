@@ -345,7 +345,6 @@ while(inp != "E"):
         value = float(input())
         #Insert function over here
         root = insert(root, value, number)
-        insert()
         logentry = []
         logentry.append("I")
         logentry.append(value)
@@ -372,7 +371,7 @@ while(inp != "E"):
         count +=1
     if(inp == "B"):
         nullval = []
-        pd.DataFrame(nullvall).to_csv("backup.csv")
+        pd.DataFrame(nullval).to_csv("backup.csv")
         print("Backing up right now!")
         beginning = time.time()
         bl.backup(root, number)
