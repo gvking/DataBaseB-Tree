@@ -51,6 +51,10 @@ def insert(root, val, thresh):
     while ct==0:
         current2 = current.right
         for i in range(len(current.actvalues)):
+            if(len(current.actvalues) == 0):
+                current.actvalues.append(0)
+                ct+=1
+                break
             if val < float(current.actvalues[i]):
                 current.actvalues.insert(0, str(val))
                 ct+=1
@@ -105,7 +109,49 @@ def insert(root, val, thresh):
                     current.parent.children.insert(index, i)
                     index+=1
                 current = current.parent
-                return root
+                break
+
+    while(len(current.children) >= thresh):
+        if(current.parent != None):
+                bigParental = current.parent
+                bigtemp = []
+                for i in current.children:
+                    bigtemp.append(i)
+                kindabigHolder = []
+                bigHolder = []
+                coolcount = 0
+                for i in bigtemp:
+                    coolcount+=1
+                    kindabigHolder.append(i)
+                    if(coolcount == thresh):
+                        coolcount = 0
+                        bigHolder.append(kindabigHolder)
+                        kindabigHolder = []
+                if(len(kindabigHolder) > 0):
+                    bigHolder.append(kindabigHolder)
+                newerHolder = []
+                for i in bigHolder:
+                    newinternalNode = None
+                    newinternalNode = LeafNodePages()
+                    i = sorted(i)
+                    for k in i:
+                        print("value:", k.value)
+                    newinternalNode.value = float(i[int(len(i)/2)].value)
+                    print(newinternalNode.value)
+                    newinternalNode.children = i
+                    newinternalNode.parent = bigParental
+                    newerHolder.append(newinternalNode)
+                index = current.parent.children.index(current)
+                del current.parent.children[index]
+                for i in newerHolder:
+                    i.right = current.children[index].right
+                    current.parent.children.insert(index, i)
+                    index+=1
+                current = current.parent
+                if(current == root):
+                    break
+    return root        
+
 
             
 
@@ -178,6 +224,8 @@ class InternalNode():
     value = -1
     children = []
     parent = None
+    def __lt__(self, other):
+        return float(self.value) < float(other.value)
     
     
 class LeafNodePages():
@@ -186,6 +234,8 @@ class LeafNodePages():
     left = None
     right = None
     parent = None
+    def __lt__(self, other):
+        return self.value < other.value
 
 def searchforval(root, val):
     if hasattr(root, 'children'):
@@ -228,7 +278,8 @@ def createtree():
                     leafnode = LeafNodePages()
                     leafnode.actvalues = row[1:]
                     [float(i) for i in leafnode.actvalues]
-                    leafnode.value = leafnode.actvalues[int(len(leafnode.actvalues)/2)]
+                    if(len(leafnode.actvalues) >= 0):
+                        leafnode.value = leafnode.actvalues[int(len(leafnode.actvalues)/2)]
                     holder.append(leafnode)
                     #print(leafnode.values)
         
@@ -299,6 +350,11 @@ while(inp != "E"):
         print("Force back up ")
         count = 0
     if(inp == "N"):
+        logentry = []
+        logentry.append("N")
+        logentry.append(-1)
+        logentry.append(count)
+        logofuncommittedActs.append(logentry)
         print("You have chosen to create a new tree! We will generate and bulkload the tree.")
         print("What fill factor")
         fillFactor = float(input())/100
@@ -312,13 +368,14 @@ while(inp != "E"):
         end = time.time()
         timediff = end - beginning
         print("time took (in seconds):", timediff)
+        
+        count+=1
+    if(inp == "R"):
         logentry = []
-        logentry.append("N")
+        logentry.append("R")
         logentry.append(-1)
         logentry.append(count)
         logofuncommittedActs.append(logentry)
-        count+=1
-    if(inp == "R"):
         beginning = time.time()
         root, number = createtree()
         end = time.time()
@@ -333,31 +390,32 @@ while(inp != "E"):
                     print("An insert wasn't comitted into storage.")
                     print("Inserting " + str(row[2]))
                     root = insert(root, float(row[2]), number)
-        logentry = []
-        logentry.append("R")
-        logentry.append(-1)
-        logentry.append(count)
-        logofuncommittedActs.append(logentry)
+        
         count +=1
     if(inp == "I"):
         print("What value do you want to insert?")
         value = float(input())
+        logentry = []
+        logentry.append("I")
+        logentry.append(value)
+        logentry.append(count)
+        logofuncommittedActs.append(logentry)
         #Insert function over here
         beginning = time.time()
         root = insert(root, value, number)
         end = time.time()
         timediff = end - beginning
         print("time took (in seconds):", timediff)
-        print("Inserted", value)
-        logentry = []
-        logentry.append("I")
-        logentry.append(value)
-        logentry.append(count)
-        logofuncommittedActs.append(logentry)
+        print("Inserted", value)       
         count+=1
     if(inp == "F"):
         print("What value do you want to search for?")
         value = input()
+        logentry = []
+        logentry.append("F")
+        logentry.append(value)
+        logentry.append(count)
+        logofuncommittedActs.append(logentry)
         beginning = time.time()
         boolean = searchforval(root, float(value))
         end = time.time()
@@ -367,11 +425,7 @@ while(inp != "E"):
             print("The value was found!")
         else:
             print("Sorry, we couldn't find that value")
-        logentry = []
-        logentry.append("F")
-        logentry.append(value)
-        logentry.append(count)
-        logofuncommittedActs.append(logentry)
+       
         count +=1
     if(inp == "B"):
         nullval = []
