@@ -198,6 +198,8 @@ while(inp != "E"):
         logofuncommittedActs.append(logentry)
         count +=1
     if(inp == "B"):
+        nullval = []
+        pd.DataFrame(nullvall).to_csv("backup.csv")
         print("Backing up right now!")
         beginning = time.time()
         bl.backup(root, number)
