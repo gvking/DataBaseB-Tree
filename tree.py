@@ -225,7 +225,12 @@ class InternalNode():
     children = []
     parent = None
     def __lt__(self, other):
-        return float(self.value) < float(other.value)
+        if(type(self.value) is str):
+            self.value = -1
+        elif(type(other.value) is str):
+            other.value = -1
+        else:
+            return float(self.value) < float(other.value)
     
     
 class LeafNodePages():
