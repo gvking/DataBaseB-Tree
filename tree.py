@@ -152,19 +152,17 @@ while(inp != "E"):
         logofuncommittedActs.append(logentry)
         count+=1
     if(inp == "R"):
+        beginning = time.time()
+        root, number = createtree()
+        end = time.time()
+        timediff = end - beginning
+        print("time took (in seconds):", timediff)
         with open('log.csv') as csvfile:
             spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
             for row in spamreader:
                 if(row[1] == "I"):
                     print("An insert wasn't comitted into storage.")
                     print("Inserting " + str(row[2]))
-                        
- 
-        beginning = time.time()
-        root, number = createtree()
-        end = time.time()
-        timediff = end - beginning
-        print("time took (in seconds):", timediff)
         logentry = []
         logentry.append("R")
         logentry.append(-1)
