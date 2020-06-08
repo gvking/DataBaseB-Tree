@@ -133,7 +133,6 @@ def insert(root, val, thresh):
                 for i in bigHolder:
                     newinternalNode = None
                     newinternalNode = LeafNodePages()
-                    i = sorted(i)
                     for k in i:
                         print("value:", k.value)
                     newinternalNode.value = float(i[int(len(i)/2)].value)
@@ -142,11 +141,12 @@ def insert(root, val, thresh):
                     newinternalNode.parent = bigParental
                     newerHolder.append(newinternalNode)
                 index = current.parent.children.index(current)
+                index = current.parent.children.index(current)
                 del current.parent.children[index]
                 for i in newerHolder:
-                    i.right = current.children[index].right
                     current.parent.children.insert(index, i)
                     index+=1
+                
                 current = current.parent
                 if(current == root):
                     break

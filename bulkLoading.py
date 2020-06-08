@@ -55,9 +55,10 @@ def backup(root, count, number):
                 mainarray.append(smallarray)
                 smallarray = []
                 countn = 0
-            smallarray.append(i)
+            smallarray.append(float(i))
             countn+=1
         if(len(smallarray)>0):
+            smallarray.append(float(9999999999999))               
             mainarray.append(smallarray)
         flushholder(mainarray)
         array = []
