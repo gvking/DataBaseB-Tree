@@ -5,7 +5,177 @@ import bulkLoading as bl
 import time
 import pandas as pd
 
+def insert(root, val, thresh):
+    #first find the leaf node
+    stopit = False
+    current = root
+    c=0
+    while stopit == False:
+        if len(current.children) == 1:
+            if hasattr(current.children[0].children[0], 'actvalues'):
+                current = current.children[0].children[0]
+                stopit = True
+            else:
+                current = current.children[0]
+        else:
+            for i in range(len(current.children)):
+                if val < float(current.children[i].value) and i==0: #traverse
+                    if hasattr(current.children[i].children[0], 'actvalues'): #the child is a leaf node
+                        current = current.children[i].children[0]
+                        stopit = True
+                        break
+                    else: #child is intermediate node to keep traversing via while loop
+                        current = current.children[i]
+                        break
+                elif i+1 == len(current.children)-1 and val >= float(current.children[i].value) and val >= float(current.children[i+1].value):
+                    if hasattr(current.children[i+1].children[0], 'actvalues'): #the child is a leaf node
+                        current = current.children[i+1].children[0]
+                        stopit = True
+                        break
+                    else: #child is intermediate node to keep traversing via while loop
+                        current = current.children[i+1]
+                        break
+                elif val >= float(current.children[i].value) and val < float(current.children[i+1].value): #traverse down
+                    if hasattr(current.children[i].children[0], 'actvalues'): #the child is a leaf node
+                        current = current.children[i].children[0]
+                        stopit = True
+                        break
+                    else: #child is intermediate node to keep traversing via while loop
+                        current = current.children[i]
+                        break
+            if stopit==True:
+                break
+            
+                
 
+    print(current.actvalues)
+    print('Hello')
+    #next insert into correct leaf
+    ct = 0
+    while ct==0:
+        current2 = current.right
+        for i in range(len(current.actvalues)):
+            if val < float(current.actvalues[i]):
+                current.actvalues.insert(0, val)
+                ct+=1
+                break
+            elif len(current.actvalues) == 1:
+                current.actvalues.append(val)
+                ct+=1
+                break
+            elif i+1 <= len(current.actvalues)-1 and val >= float(current.actvalues[i]) and val < float(current.actvalues[i+1]):
+                current.actvalues.insert(i+1, val)
+                ct+=1
+                break
+            elif i == len(current.actvalues)-1 and val >= float(current.actvalues[i]) and val < float(current2.actvalues[0]):
+                current.actvalues.append(val)
+                ct+=1
+                break
+            else:
+                current = current.right
+
+
+    #next, if the leaf is full, propogate up
+    
+    if len(current.actvalues) >= thresh:
+        while True:
+            if current.parent == root:
+                splitter = math.floor(len(current.parent.children)/2)
+                firstHalf = [current.parent.children[i] for i in range(0, splitter)]
+                secondHalf = [current.parent.children[i] for i in range(splitter, len(current.parent.children))]
+                new1 = InternalNode()
+                new1.children = firstHalf
+                new1.parent=root
+                new1.value = firstHalf[-1].value
+                for i in range(len(firstHalf)):
+                    firstHalf[i].parent = new1
+                new2 = InternalNode()
+                new2.children = secondHalf
+                new2.parent=root
+                new2.value = secondHalf[0].value
+                for i in range(len(secondHalf)):
+                    secondHalf[i].parent = new2
+                root.children = [new1, new2]
+                current = new1.children[0]
+            elif hasattr(current, 'actvalues'): #if current is at a leaf node, do the following: split leaf node, propogate median up
+                splitter = math.floor(len(current.actvalues)/2)
+                firstHalf = [current.actvalues[i] for i in range(0, splitter)]
+                secondHalf = [current.actvalues[i] for i in range(splitter, len(current.actvalues))]
+                if float(secondHalf[0]) < float(current.parent.value): #left node side
+                    current.actvalues = secondHalf
+                    newOne = LeafNodePages()
+                    newOne.actvalues = firstHalf
+                    current.left = newOne
+                    newOne.right = current
+                    newOne.left = current.left.left
+                    if current.left.left != None:
+                        current.left.left.right = newOne
+                    #add newOne to the array of leaf nodes at the parent
+                    current.parent.children.insert(current.parent.children.index(current)-1, newOne)
+                    newOne.parent = current.parent
+                    #push median up
+                    newOne2 = InternalNode()
+                    newOne2.value = secondHalf[0]
+                    current.parent.parent.children.insert(current.parent.parent.children.index(current.parent)-1, newOne2)
+                    newOne2.children = [current.parent.children[i] for i in range(0, current.parent.children.index(current))]
+                    for i in range(len(newOne2.children)):
+                        newOne2.children[i].parent = newOne2
+                    del current.parent.children[0:current.parent.children.index(current)]
+                else:
+                    current.actvalues = firstHalf
+                    newOne = LeafNodePages()
+                    newOne.actvalues = secondHalf
+                    current.right = newOne
+                    newOne.left = current
+                    newOne.right = current.right.right
+                    if current.right.right != None:
+                        current.right.right.left = newOne
+                    #everything is connected, append the values
+                    current.parent.children.insert(current.parent.children.index(current)+1, newOne)
+                    newOne.parent = current.parent
+                    #push median up
+                    newOne2 = InternalNode()
+                    newOne2.value = secondHalf[0]
+                    current.parent.parent.children.insert(current.parent.parent.children.index(current.parent)+1, newOne2)
+                    newOne2.children = [current.parent.children[i] for i in range(current.parent.children.index(current)+1, len(current.parent.children))]
+                    for i in range(len(newOne2.children)):
+                        newOne2.children[i].parent = newOne2
+                    del current.parent.children[current.parent.children.index(current)+1:]
+            else: #current is not a leaf node
+                splitter = math.floor(len(current.parent.children)/2)
+                firstHalf = [current.parent.children[i] for i in range(0, splitter)]
+                secondHalf = [current.parent.children[i] for i in range(splitter, len(current.parent.children))]
+                if float(secondHalf[0].value) < float(current.parent.value):
+                    current.parent.children = secondHalf
+                    for i in range(len(secondHalf)):
+                        secondHalf[i].parent = current.parent
+                    #push median up
+                    newOne2 = InternalNode()
+                    newOne2.value = secondHalf[0].value
+                    current.parent.parent.children.insert(current.parent.parent.children.index(current.parent)-1, newOne2)
+                    newOne2.parent = current.parent.parent
+                    newOne2.children = firstHalf
+                    for i in range(len(firstHalf)):
+                        firstHalf[i].parent = newOne2
+                else:
+                    current.parent.children = firstHalf
+                    for i in range(len(firstHalf)):
+                       firstHalf[i].parent = current.parent
+                    newOne2 = InternalNode()
+                    newOne2.value = secondHalf[0].value
+                    current.parent.parent.children.insert(current.parent.parent.children.index(current.parent)+1, newOne2)
+                    newOne2.parent = current.parent.parent
+                    newOne2.children = secondHalf
+                    for i in range(len(secondHalf)):
+                        secondHalf[i].parent = newOne2
+            
+            if len(current.parent.parent.children) < thresh:
+                break
+            else:
+                current = current.parent
+            
+
+    return root
 
 class InternalNode():
     value = -1
@@ -173,6 +343,7 @@ while(inp != "E"):
         print("What value do you want to insert?")
         value = float(input())
         #Insert function over here
+        insert()
         logentry = []
         logentry.append("I")
         logentry.append(value)
