@@ -80,7 +80,7 @@ def insert(root, val, thresh):
     parentStuff = None
     tempHolder = []
     newinternalNode = None
-    while( (hasattr(current, 'actvalues') and len(current.actvalues) >= thresh) or len(current.children) >= thresh):
+    while( (hasattr(current, 'actvalues') and len(current.actvalues) >= thresh) or (hasattr(current, 'children') and len(current.children) >= thresh)):
         if(current.parent!= None):
             if(hasattr(current, 'actvalues')):
                 parentStuff = current.parent
@@ -291,7 +291,6 @@ def createtree():
                     number = len(row) - 1
                     leafnode = LeafNodePages()
                     leafnode.actvalues = row[1:]
-                    [float(i) for i in leafnode.actvalues]
                     if(len(leafnode.actvalues) >= 0):
                         leafnode.value = leafnode.actvalues[int(len(leafnode.actvalues)/2)]
                     holder.append(leafnode)
